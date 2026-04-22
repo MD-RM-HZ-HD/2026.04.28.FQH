@@ -8,60 +8,59 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
 </head>
-<body>
+<body class="p-2 md:p-4">
 
-    <div class="max-w-6xl mx-auto p-4 md:p-6" id="app-container" style="font-size: 18px;">
+    <div class="max-w-4xl mx-auto" id="app-container" style="font-size: 16px;">
         
-        <div class="glass-panel p-5 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
-            <h1 class="text-3xl font-black" style="color: var(--text-main)">الفقه</h1>
-            <div class="flex flex-wrap gap-3">
+        <div class="glass-panel p-2 mb-4 flex justify-between items-center gap-2 relative z-50">
+            
+            <div class="block md:hidden flex-1 relative">
+                <select id="mobile-tab-select" class="w-full p-2 pr-2 pl-6 rounded-lg border-2 border-[color:var(--border-color)] bg-[color:var(--bg-panel-solid)] text-[color:var(--text-main)] text-sm font-black outline-none appearance-none cursor-pointer shadow-sm">
+                    <option value="mindmap">المشجرة</option>
+                    <option value="cards">البطاقات</option>
+                    <option value="tf">صواب وخطأ</option>
+                    <option value="mcq">اختياري</option>
+                    <option value="fill">الفراغات</option>
+                    <option value="comp">المقارنات</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-2 text-[color:var(--text-main)]">
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+            </div>
+
+            <div class="nav-pills hidden md:flex flex-1 m-0 p-0" id="nav-tabs">
+                <button class="pill-btn active text-sm py-2" data-tab="mindmap">المشجرة</button>
+                <button class="pill-btn text-sm py-2" data-tab="cards">البطاقات</button>
+                <button class="pill-btn text-sm py-2" data-tab="tf">صواب وخطأ</button>
+                <button class="pill-btn text-sm py-2" data-tab="mcq">اختياري</button>
+                <button class="pill-btn text-sm py-2" data-tab="fill">الفراغات</button>
+                <button class="pill-btn text-sm py-2" data-tab="comp">المقارنات</button>
+            </div>
+
+            <div class="relative">
+                <button id="settings-btn" class="p-2 rounded-lg border-2 border-[color:var(--border-color)] bg-[color:var(--bg-panel-solid)] hover:bg-[color:var(--bg-panel-hover)] text-lg flex items-center justify-center">
+                    ⚙️
+                </button>
                 
-                <div class="relative flex items-center">
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 z-10">
-                        <span class="text-xl">🎨</span>
-                    </div>
-                    <select id="theme-select" class="p-3 pr-10 pl-10 rounded-lg font-bold border-2 border-[color:var(--border-color)] bg-[color:var(--bg-panel-solid)] hover:bg-[color:var(--bg-panel-hover)] text-[color:var(--text-main)] outline-none cursor-pointer appearance-none shadow-sm transition-colors duration-300 relative z-0">
+                <div id="settings-menu" class="hidden absolute left-0 top-full mt-2 w-48 flex-col bg-[color:var(--bg-panel-solid)] border-2 border-[color:var(--border-color)] rounded-xl shadow-xl p-3 gap-3">
+                    <div class="text-xs font-bold text-[color:var(--text-muted)] text-center">المظهر (الثيم)</div>
+                    <select id="theme-select" class="w-full p-2 text-sm rounded-lg border-2 border-[color:var(--border-color)] bg-[color:var(--bg-panel)] text-[color:var(--text-main)] outline-none cursor-pointer">
                         <option value="0">الأخضر الأصلي</option>
                         <option value="1">الأخضر الرمادي</option>
                         <option value="2">المريمية الهادئة</option>
-                       <option value="3">الرمادي</option>
+                        <option value="3">الرمادي</option>
                     </select>
-                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-[color:var(--text-main)] z-10">
-                        <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                    <div class="text-xs font-bold text-[color:var(--text-muted)] text-center mt-1">حجم الخط</div>
+                    <div class="flex justify-between gap-2">
+                        <button id="btn-font-up" class="flex-1 p-2 bg-[color:var(--bg-panel)] hover:bg-[color:var(--bg-panel-hover)] rounded-lg border-2 border-[color:var(--border-color)] font-bold text-sm">A+</button>
+                        <button id="btn-font-down" class="flex-1 p-2 bg-[color:var(--bg-panel)] hover:bg-[color:var(--bg-panel-hover)] rounded-lg border-2 border-[color:var(--border-color)] font-bold text-sm">A-</button>
                     </div>
                 </div>
-
-                <div class="flex gap-2">
-                    <button id="btn-font-up" class="p-3 px-5 rounded-lg font-bold border-2 border-[color:var(--border-color)] bg-[color:var(--bg-panel-solid)] hover:bg-[color:var(--bg-panel-hover)] text-[color:var(--text-main)] shadow-sm">A+</button>
-                    <button id="btn-font-down" class="p-3 px-5 rounded-lg font-bold border-2 border-[color:var(--border-color)] bg-[color:var(--bg-panel-solid)] hover:bg-[color:var(--bg-panel-hover)] text-[color:var(--text-main)] shadow-sm">A-</button>
-                </div>
             </div>
+            
         </div>
 
-        <div class="block md:hidden mb-6 relative">
-            <select id="mobile-tab-select" class="w-full p-4 rounded-xl border-2 border-[color:var(--border-color)] bg-[color:var(--bg-panel-solid)] text-[color:var(--text-main)] font-black outline-none appearance-none cursor-pointer shadow-sm">
-                <option value="mindmap">المشجرة</option>
-                <option value="cards">البطاقات</option>
-                <option value="tf">صواب وخطأ</option>
-                <option value="mcq">اختياري</option>
-                <option value="fill">الفراغات</option>
-                <option value="comp">المقارنات</option>
-            </select>
-            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-[color:var(--text-main)]">
-                <svg class="fill-current h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-            </div>
-        </div>
-
-        <div class="nav-pills hidden md:flex mb-6 pb-2" id="nav-tabs">
-            <button class="pill-btn active" data-tab="mindmap">المشجرة</button>
-            <button class="pill-btn" data-tab="cards">البطاقات</button>
-            <button class="pill-btn" data-tab="tf">صواب وخطأ</button>
-            <button class="pill-btn" data-tab="mcq">اختياري</button>
-            <button class="pill-btn" data-tab="fill">الفراغات</button>
-            <button class="pill-btn" data-tab="comp">المقارنات</button>
-        </div>
-
-        <div id="content-area" class="glass-panel p-6 min-h-[600px]"></div>
+        <div id="content-area" class="glass-panel p-3 md:p-5 min-h-[70vh]"></div>
 
     </div>
 
