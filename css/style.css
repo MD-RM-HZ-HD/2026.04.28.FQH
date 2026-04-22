@@ -1,148 +1,274 @@
-/* القيم الافتراضية - سيتم استبدالها ديناميكياً بواسطة الجافاسكربت */
+/* الإعدادات الافتراضية للثيم (الرمادي) */
 :root {
-    --bg-main: linear-gradient(135deg, #4b6856 0%, #283b2f 100%);
-    --bg-panel: rgba(170, 187, 165, 0.9); 
-    --bg-panel-solid: #aabba5;
-    --bg-panel-hover: #96a891;   
-    --border-color: #074344;     
-    --accent-primary: #074344;   
-    --accent-text: #ffffff;      
-    --accent-green: #10b981;     
-    --accent-danger: #ef4444; 
-    --text-main: #111111;        
-    --text-muted: #283b2f;       
-}
-
-/* الإعدادات العامة وتأثيرات الانتقال السلسة */
-body, .glass-panel, button, input, select, div, span, h1, h2, h3, ul, li {
-    transition: background 0.4s ease, background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+    --bg-main: hsl(210, 13%, 95%);
+    --bg-panel: hsl(204, 12.2%, 91.96%);
+    --bg-panel-solid: hsl(210, 13%, 88%);
+    --bg-panel-hover: hsl(204, 12%, 75%);
+    --border-color: hsl(204, 12%, 65%);
+    --accent-primary: hsl(203, 12%, 35%);
+    --accent-text: #ffffff;
+    --text-main: #333333;
+    --text-muted: #8d8d8d;
+    --accent-green: #359c06;
+    --accent-danger: #a94442;
 }
 
 body {
     font-family: 'Tajawal', sans-serif;
-    background: var(--bg-main);
-    background-attachment: fixed;
+    background: var(--bg-main); 
+    background-attachment: fixed; 
     color: var(--text-main);
-    min-height: 100vh;
-    margin: 0;
-    direction: rtl; /* دعم اتجاه اللغة العربية */
-    user-select: none; /* منع تظليل النصوص لإعطاء شعور التطبيق */
-    -webkit-tap-highlight-color: transparent; /* إخفاء وميض النقر في الجوال */
-    /* ======== الخصائص الجديدة التي تمت إضافتها للتدعيم ======== */
-    overscroll-behavior-y: none; /* يمنع تحديث الصفحة بالسحب للأسفل */
-    -webkit-overflow-scrolling: touch; /* تمرير سلس في iOS */
-    -webkit-user-drag: none; /* يمنع سحب الصور أو العناصر */
-    touch-action: pan-x pan-y; /* يمنع التكبير بالنقر المزدوج */
-}
-/* إخفاء شريط التمرير بالكامل لتجربة أنظف */
-::-webkit-scrollbar {
-    display: none;
-}
-/* استثناء حقول الإدخال للسماح بالكتابة والتحديد بحرية */
-input, textarea {
-    user-select: text !important;
+    min-height: 100vh; 
+    margin: 0; 
+    direction: rtl;
+    user-select: none; 
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* الحاويات الرئيسية */
+/* استثناء حقول الإدخال لتسمح بالتحديد والكتابة */
+input, textarea { 
+    user-select: text !important; 
+}
+
+/* تأثيرات الانتقال السلسة */
+body, .glass-panel, button, input, select, div, span, h1, h2, h3, ul, li {
+    transition: background 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* اللوحات الزجاجية */
 .glass-panel {
-    background-color: var(--bg-panel);
+    background-color: var(--bg-panel); 
     border: 2px solid var(--border-color);
-    border-radius: 1.25rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    border-radius: 1rem; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(8px); 
+    -webkit-backdrop-filter: blur(8px);
 }
 
-.nav-pills { flex-wrap: wrap; justify-content: center; gap: 0.5rem; padding: 0.5rem; }
+/* أزرار التنقل العلوية */
+.nav-pills { 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 0.25rem; 
+}
+
 .pill-btn {
-    flex: 1 1 calc(20% - 0.5rem); min-width: 130px; padding: 0.75rem 0.5rem;
-    border-radius: 9999px; font-weight: 900; text-align: center;
-    background-color: var(--bg-panel-solid); color: var(--text-main);
-    border: 2px solid var(--border-color); cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    font-size: 0.95rem;
-}
-.pill-btn:hover { background-color: var(--bg-panel-hover); }
-.pill-btn.active {
-    background-color: var(--accent-primary); color: var(--accent-text);
-    border-color: var(--accent-primary); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
+    flex: 1 1 calc(30% - 0.25rem); 
+    min-width: 80px; 
+    padding: 0.5rem 0.25rem;
+    border-radius: 9999px; 
+    font-weight: 900; 
+    text-align: center;
+    background-color: var(--bg-panel-solid); 
+    color: var(--text-main);
+    border: 2px solid var(--border-color); 
+    cursor: pointer;
 }
 
-.animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.pill-btn:hover { 
+    background-color: var(--bg-panel-hover); 
+}
+
+.pill-btn.active {
+    background-color: var(--accent-primary); 
+    color: var(--accent-text);
+    border-color: var(--accent-primary); 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* تأثير الظهور المتدرج */
+.animate-fade-in { 
+    animation: fadeIn 0.3s ease-out forwards; 
+}
+
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(5px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
 
 /* الخريطة الشجرية */
-.tree-list { list-style-type: none; position: relative; margin-right: 1rem; }
-.tree-list:not(.root-list)::before {
-    content: ''; position: absolute; top: 0; bottom: 0; right: 0.5rem;
-    width: 2px; background: var(--border-color); border-radius: 2px;
+.tree-list { 
+    list-style-type: none; 
+    position: relative; 
+    margin-right: 0.5rem; 
 }
-.tree-node { position: relative; margin-top: 0.75rem; margin-bottom: 0.75rem; }
-.tree-node::before {
-    content: ''; position: absolute; top: 1.25rem; right: -0.5rem;
-    width: 1rem; height: 2px; background: var(--border-color); border-radius: 2px;
+
+.tree-list:not(.root-list)::before { 
+    content: ''; 
+    position: absolute; 
+    top: 0; 
+    bottom: 0; 
+    right: 0.25rem; 
+    width: 2px; 
+    background: var(--border-color); 
+    border-radius: 2px; 
 }
-.root-list > .tree-node::before { display: none; }
+
+.tree-node { 
+    position: relative; 
+    margin-top: 0.5rem; 
+    margin-bottom: 0.5rem; 
+}
+
+.tree-node::before { 
+    content: ''; 
+    position: absolute; 
+    top: 1rem; 
+    right: -0.25rem; 
+    width: 0.5rem; 
+    height: 2px; 
+    background: var(--border-color); 
+    border-radius: 2px; 
+}
+
+.root-list > .tree-node::before { 
+    display: none; 
+}
 
 .tree-content {
-    display: inline-flex; align-items: center; padding: 0.75rem 1.25rem;
-    border-radius: 0.75rem; font-weight: 700; border: 2px solid var(--border-color);
-    background-color: var(--bg-panel-solid); color: var(--text-main);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05); position: relative; z-index: 2; max-width: 95%; line-height: 1.6;
-}
-.tree-content:hover { transform: scale(1.02); z-index: 10; border-color: var(--accent-primary); background-color: var(--bg-panel-hover); }
-.tree-content.root-node { background-color: var(--accent-primary); color: var(--accent-text); font-size: 1.1rem; }
-
-.toggle-icon {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 24px; height: 24px; text-align: center;
-    background: rgba(128,128,128,0.2); border-radius: 50%; margin-left: 0.5rem; font-size: 0.8em;
+    display: inline-flex; 
+    align-items: center; 
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem; 
+    font-weight: 700; 
+    border: 2px solid var(--border-color);
+    background-color: var(--bg-panel-solid); 
+    color: var(--text-main); 
+    position: relative; 
+    z-index: 2;
 }
 
-/* البطاقات ثلاثية الأبعاد */
-.flip-card { perspective: 1000px; height: 400px; width: 100%; cursor: pointer; }
-.flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
-.flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+.tree-content.root-node { 
+    background-color: var(--accent-primary); 
+    color: var(--accent-text); 
+}
+
+.toggle-icon { 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    width: 20px; 
+    height: 20px; 
+    background: rgba(128,128,128,0.2); 
+    border-radius: 50%; 
+    margin-left: 0.5rem; 
+}
+
+/* البطاقات التفاعلية */
+.flip-card { 
+    perspective: 1000px; 
+    height: 50vh; 
+    max-height: 280px; 
+    min-height: 200px; 
+    width: 100%; 
+    cursor: pointer; 
+}
+
+.flip-card-inner { 
+    position: relative; 
+    width: 100%; 
+    height: 100%; 
+    transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1); 
+    transform-style: preserve-3d; 
+}
+
+.flip-card.flipped .flip-card-inner { 
+    transform: rotateY(180deg); 
+}
+
 .flip-card-front, .flip-card-back {
-    position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 2.5rem; border-radius: 1.5rem; text-align: center; border: 2px solid var(--border-color);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    position: absolute; 
+    width: 100%; 
+    height: 100%; 
+    backface-visibility: hidden;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+    border-radius: 1rem; 
+    text-align: center; 
+    border: 2px solid var(--border-color);
 }
-.flip-card-front { background-color: var(--bg-panel-solid); font-size: 1.4rem; font-weight: 900; color: var(--text-main); line-height: 1.6; }
-.flip-card-back { background-color: var(--accent-primary); color: var(--accent-text); transform: rotateY(180deg); font-size: 1.25rem; font-weight: bold; line-height: 1.8; overflow-y: auto; }
+
+.flip-card-front { 
+    background-color: var(--bg-panel-solid); 
+    color: var(--text-main); 
+}
+
+.flip-card-back { 
+    background-color: var(--accent-primary); 
+    color: var(--accent-text); 
+    transform: rotateY(180deg); 
+    overflow-y: auto; 
+}
 
 /* الأزرار والمدخلات */
-.action-btn {
-    background-color: var(--accent-primary); color: var(--accent-text); padding: 1rem; border-radius: 1rem; font-weight: 900;
-    width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.5rem; border: 2px solid var(--border-color); cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-shadow: none;
+.action-btn { 
+    background-color: var(--accent-primary); 
+    color: var(--accent-text); 
+    border-radius: 0.75rem; 
+    font-weight: 900; 
+    width: 100%; 
+    border: 2px solid var(--border-color); 
+    cursor: pointer; 
 }
-.action-btn:hover:not(:disabled) { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
-.action-btn:disabled { opacity: 0.5; cursor: not-allowed; background-color: var(--bg-panel-solid); color: var(--text-muted); }
 
-.opt-btn { background-color: var(--bg-panel-solid); border: 2px solid var(--border-color); color: var(--text-main); cursor: pointer; }
-.opt-btn:hover:not(:disabled) { border-color: var(--accent-primary); background-color: var(--bg-panel-hover); }
-.opt-btn.selected { border-color: var(--accent-primary); background-color: var(--bg-panel-hover); color: var(--text-main); }
-.opt-btn.correct { background-color: var(--accent-green) !important; color: #ffffff !important; border-color: var(--accent-green) !important; text-shadow: none; }
-.opt-btn.wrong { background-color: var(--accent-danger) !important; color: #ffffff !important; border-color: var(--accent-danger) !important; text-shadow: none; }
-
-.input-stylish {
-    width: 100%; padding: 1rem; border-radius: 1rem; border: 2px solid var(--border-color);
-    background-color: var(--bg-panel-solid); color: var(--text-main); font-weight: bold; outline: none;
+.action-btn:disabled { 
+    opacity: 0.5; 
+    background-color: var(--bg-panel-solid); 
+    color: var(--text-muted); 
+    cursor: not-allowed; 
 }
-.input-stylish:focus { border-color: var(--accent-primary); background-color: var(--bg-panel); }
 
-/* الأكورديون و الأسئلة */
-.accordion-item { background-color: var(--bg-panel); border: 2px solid var(--border-color); border-radius: 1rem; margin-bottom: 1.5rem; overflow: hidden; }
-.accordion-header { width: 100%; padding: 1.5rem; text-align: right; font-weight: 900; color: var(--text-main); background-color: var(--bg-panel-solid); border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 1.25em; border-bottom: 2px solid transparent; }
-.accordion-header:hover { background-color: var(--bg-panel-hover); }
-.accordion-icon { display: inline-flex; background-color: var(--border-color); color: var(--text-main); border-radius: 50%; width: 32px; height: 32px; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 1rem; font-weight: bold;}
-.accordion-item.active .accordion-icon { transform: rotate(180deg); background-color: var(--accent-primary); color: var(--accent-text); }
-.accordion-item.active .accordion-header { border-bottom-color: var(--border-color); }
-.accordion-body { max-height: 0; overflow: hidden; opacity: 0; background-color: var(--bg-panel); }
-.accordion-item.active .accordion-body { max-height: 999999px; opacity: 1; transition: max-height 0.6s ease-in-out, opacity 0.4s ease; }
+.opt-btn { 
+    background-color: var(--bg-panel-solid); 
+    border: 2px solid var(--border-color); 
+    color: var(--text-main); 
+    cursor: pointer; 
+}
+
+.opt-btn.selected { 
+    border-color: var(--accent-primary); 
+    background-color: var(--bg-panel-hover); 
+}
+
+.opt-btn.correct { 
+    background-color: var(--accent-green) !important; 
+    color: #ffffff !important; 
+    border-color: var(--accent-green) !important; 
+}
+
+.opt-btn.wrong { 
+    background-color: var(--accent-danger) !important; 
+    color: #ffffff !important; 
+    border-color: var(--accent-danger) !important; 
+}
+
+.input-stylish { 
+    width: 100%; 
+    border-radius: 0.75rem; 
+    border: 2px solid var(--border-color); 
+    background-color: var(--bg-panel-solid); 
+    color: var(--text-main); 
+    outline: none; 
+}
+
+.input-stylish:focus { 
+    border-color: var(--accent-primary); 
+    background-color: var(--bg-panel); 
+}
 
 /* شريط التقدم */
-.progress-container { height: 10px; background-color: var(--bg-panel-solid); border-radius: 5px; overflow: hidden; margin-bottom: 1.5rem; border: 2px solid var(--border-color); }
-.progress-bar { height: 100%; background-color: var(--accent-primary); width: 0%; transition: width 0.5s ease; }
+.progress-container { 
+    height: 6px; 
+    background-color: var(--bg-panel-solid); 
+    border-radius: 3px; 
+    overflow: hidden; 
+    border: 1px solid var(--border-color); 
+}
+
+.progress-bar { 
+    height: 100%; 
+    background-color: var(--accent-primary); 
+    transition: width 0.3s ease; 
+}
