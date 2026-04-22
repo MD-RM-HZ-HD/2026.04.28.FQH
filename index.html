@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>الاختبار الشامل</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+    <div class="max-w-6xl mx-auto p-4 md:p-6" id="app-container" style="font-size: 18px;">
+        
+        <div class="glass-panel p-5 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <h1 class="text-3xl font-black" style="color: var(--text-main)">الفقه</h1>
+            <div class="flex flex-wrap gap-3">
+                
+                <div class="relative flex items-center">
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 z-10">
+                        <span class="text-xl">🎨</span>
+                    </div>
+                    <select id="theme-select" class="p-3 pr-10 pl-10 rounded-lg font-bold border-2 border-[color:var(--border-color)] bg-[color:var(--bg-panel-solid)] hover:bg-[color:var(--bg-panel-hover)] text-[color:var(--text-main)] outline-none cursor-pointer appearance-none shadow-sm transition-colors duration-300 relative z-0">
+                        <option value="0">الأخضر الأصلي</option>
+                        <option value="1">الأخضر الرمادي</option>
+                        <option value="2">المريمية الهادئة</option>
+                       <option value="3">الرمادي</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-[color:var(--text-main)] z-10">
+                        <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                    </div>
+                </div>
+
+                <div class="flex gap-2">
+                    <button id="btn-font-up" class="p-3 px-5 rounded-lg font-bold border-2 border-[color:var(--border-color)] bg-[color:var(--bg-panel-solid)] hover:bg-[color:var(--bg-panel-hover)] text-[color:var(--text-main)] shadow-sm">A+</button>
+                    <button id="btn-font-down" class="p-3 px-5 rounded-lg font-bold border-2 border-[color:var(--border-color)] bg-[color:var(--bg-panel-solid)] hover:bg-[color:var(--bg-panel-hover)] text-[color:var(--text-main)] shadow-sm">A-</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="block md:hidden mb-6 relative">
+            <select id="mobile-tab-select" class="w-full p-4 rounded-xl border-2 border-[color:var(--border-color)] bg-[color:var(--bg-panel-solid)] text-[color:var(--text-main)] font-black outline-none appearance-none cursor-pointer shadow-sm">
+                <option value="mindmap">المشجرة</option>
+                <option value="cards">البطاقات</option>
+                <option value="tf">صواب وخطأ</option>
+                <option value="mcq">اختياري</option>
+                <option value="fill">الفراغات</option>
+                <option value="comp">المقارنات</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-[color:var(--text-main)]">
+                <svg class="fill-current h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            </div>
+        </div>
+
+        <div class="nav-pills hidden md:flex mb-6 pb-2" id="nav-tabs">
+            <button class="pill-btn active" data-tab="mindmap">المشجرة</button>
+            <button class="pill-btn" data-tab="cards">البطاقات</button>
+            <button class="pill-btn" data-tab="tf">صواب وخطأ</button>
+            <button class="pill-btn" data-tab="mcq">اختياري</button>
+            <button class="pill-btn" data-tab="fill">الفراغات</button>
+            <button class="pill-btn" data-tab="comp">المقارنات</button>
+        </div>
+
+        <div id="content-area" class="glass-panel p-6 min-h-[600px]"></div>
+
+    </div>
+
+    <script src="./data/data.Mind.Map.js"></script>
+    <script src="./data/data.Flash.Cards.js"></script>
+    <script src="./data/data.qz.True.False.js"></script>
+    <script src="./data/data.qz.Multiple.Choice.js"></script>
+    <script src="./data/data.qz.Fill.Blank.js"></script>
+    <script src="./data/data.qz.Compare.js"></script>
+
+    <script src="./js/script.js"></script>
+</body>
+</html>
