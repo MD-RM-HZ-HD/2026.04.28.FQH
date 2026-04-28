@@ -1,17 +1,19 @@
 // --- تهيئة قاعدة البيانات وربط المتغيرات ---
 const DB = {
-    mindmapTree: typeof Mind_Map !== 'undefined' ? Mind_Map.children : null,
+    mindmapTree: {
+        1: typeof Mind_Map !== 'undefined' ? Mind_Map.children : null,
+        2: typeof Mind_Map_1 !== 'undefined' ? Mind_Map_1.children : null
+    },
     
     cards: typeof Flash_Cards !== 'undefined' ? Flash_Cards.map(item => ({
         q: item.question, 
         a: item.answer
     })) : null,
     
-    tf: typeof True_False !== 'undefined' ? True_False.map(item => ({
-        q: item.text, 
-        a: item.answer,
-        exp: item.explanation
-    })) : null,
+    tf: {
+        1: typeof True_False !== 'undefined' ? True_False.map(item => ({ q: item.text, a: item.answer, exp: item.explanation })) : null,
+        2: typeof True_False_1 !== 'undefined' ? True_False_1.map(item => ({ q: item.text, a: item.answer, exp: item.explanation })) : null
+    },
     
     mcq: typeof Multiple_Choice !== 'undefined' ? Multiple_Choice.map(item => ({
         q: item.q, 
@@ -39,8 +41,7 @@ const DB = {
     }) : null
 };
 
-// --- المظاهر (الثيمات) - الرمادي أصبح الأول ---
-// --- المظاهر (الثيمات) مرتبة لتتطابق مع HTML ---
+// --- المظاهر (الثيمات) ---
 const THEMES = [
     {
         name: "الأخضر الأصلي", // 0
@@ -79,10 +80,12 @@ const THEMES = [
         }
     }
 ];
+
 // إدارة حالة التطبيق
 const State = {
     tab: 'mindmap', 
     fontSize: parseInt(localStorage.getItem('fontSize')) || 16,
+    activeSet: { mindmap: 1, tf: 1 }, // تتبع المجموعة الحالية لكل قسم
     cardsIdx: 0, cardsFlipped: false,
     tfIdx: 0, tfSelected: null, tfChecked: false, tfScore: 0,
     mcqIdx: 0, mcqSelected: null, mcqChecked: false, mcqScore: 0,
@@ -104,9 +107,24 @@ const DOM = {
 };
 
 function updateTabCounters() {
+    // حساب عدد أسئلة الصح والخطأ من كلا الملفين
+    let tfCountText = 0;
+    if (DB.tf) {
+        const count1 = DB.tf[1] ? DB.tf[1].length : 0;
+        const count2 = DB.tf[2] ? DB.tf[2].length : 0;
+        
+        // عرض الرقمين معاً (مثلاً: 147 + 50)
+        if (count1 > 0 && count2 > 0) {
+            tfCountText = `${count1} + ${count2}`;
+        } else {
+            // في حال كان أحدهما فارغاً، يعرض المجموع فقط
+            tfCountText = count1 + count2;
+        }
+    }
+
     const counts = { 
         cards: DB.cards?.length, 
-        tf: DB.tf?.length, 
+        tf: tfCountText, // استخدام النص الجديد هنا
         mcq: DB.mcq?.length, 
         fill: DB.fill?.length, 
         comp: DB.comp?.length 
@@ -114,7 +132,7 @@ function updateTabCounters() {
     
     if(DOM.mobileSelect) {
         DOM.mobileSelect.querySelectorAll('option').forEach(opt => { 
-            if(counts[opt.value]) {
+            if(counts[opt.value] !== undefined) {
                 opt.textContent = opt.textContent.split(' (')[0] + ` (${counts[opt.value]})`; 
             }
         });
@@ -122,7 +140,7 @@ function updateTabCounters() {
     
     if(DOM.tabs) {
         DOM.tabs.forEach(btn => { 
-            if(counts[btn.dataset.tab]) {
+            if(counts[btn.dataset.tab] !== undefined) {
                 btn.textContent = btn.textContent.split(' (')[0] + ` (${counts[btn.dataset.tab]})`; 
             }
         });
@@ -140,7 +158,7 @@ function shuffleArray(array) {
 
 function randomizeAllQuestions() { 
     shuffleArray(DB.cards); 
-    shuffleArray(DB.tf); 
+    if(DB.tf) { shuffleArray(DB.tf[1]); shuffleArray(DB.tf[2]); }
     shuffleArray(DB.mcq); 
     shuffleArray(DB.fill); 
     shuffleArray(DB.comp); 
@@ -221,7 +239,31 @@ function changeFont(val) {
 }
 
 function applyFontSize() { 
-document.documentElement.style.fontSize = State.fontSize + 'px';}
+    document.documentElement.style.fontSize = State.fontSize + 'px';
+}
+
+// دالة تبديل المجموعات (1 و 2)
+window.switchSet = function(tabKey, setNum) {
+    State.activeSet[tabKey] = setNum;
+    if (tabKey === 'tf') {
+        State.tfIdx = 0;
+        State.tfScore = 0;
+        State.tfChecked = false;
+        State.tfSelected = null;
+    }
+    updateTabCounters();
+    renderTab();
+};
+
+function getSetButtonsHTML(tabKey) {
+    const active = State.activeSet[tabKey];
+    return `
+        <div class="flex gap-1" dir="rtl">
+            <button class="w-6 h-6 flex justify-center items-center rounded text-xs font-black transition-all ${active === 1 ? 'bg-black text-white' : 'bg-black/30 text-white hover:bg-black/50'}" onclick="window.switchSet('${tabKey}', 1)">1</button>
+            <button class="w-6 h-6 flex justify-center items-center rounded text-xs font-black transition-all ${active === 2 ? 'bg-black text-white' : 'bg-black/30 text-white hover:bg-black/50'}" onclick="window.switchSet('${tabKey}', 2)">2</button>
+        </div>
+    `;
+}
 
 function renderTab() {
     if(!DOM.content) return; 
@@ -240,11 +282,16 @@ function renderTab() {
     attachDynamicListeners();
 }
 
-function getProgressBar(current, total) {
-    const perc = ((current) / total) * 100;
+function getProgressBar(current, total, tabKey = null) {
+    const perc = total > 0 ? ((current) / total) * 100 : 0;
+    let setBtns = tabKey === 'tf' ? getSetButtonsHTML('tf') : '';
+    
     return `
-        <div class="flex justify-between text-xs font-bold text-[color:var(--text-muted)] mb-1">
-            <span>مؤشر التقدم</span>
+        <div class="flex justify-between items-center text-xs font-bold text-[color:var(--text-muted)] mb-1">
+            <div class="flex items-center gap-2">
+                <span>مؤشر التقدم</span>
+                ${setBtns}
+            </div>
             <span>${current + 1 > total ? total : current + 1} / ${total}</span>
         </div>
         <div class="progress-container mb-3">
@@ -254,7 +301,7 @@ function getProgressBar(current, total) {
 }
 
 function renderFinishScreen(title, score, total, tabKey) {
-    const perc = Math.round((score / total) * 100);
+    const perc = total > 0 ? Math.round((score / total) * 100) : 0;
     return `
         <div class="text-center py-6 flex flex-col items-center animate-fade-in">
             <div class="text-5xl mb-4">🏆</div>
@@ -309,15 +356,26 @@ function buildTreeHTML(node, level = 0) {
 }
 
 function renderMindmap() {
-    if(!DB.mindmapTree) return '<div class="text-center p-4">لا توجد بيانات للمشجرة</div>';
+    const active = State.activeSet.mindmap;
+    const currentData = DB.mindmapTree[active];
+    
+    const headerBtns = `
+        <div class="flex justify-center items-center gap-2 mb-4">
+            <span class="text-xs font-bold text-[color:var(--text-muted)]">اختر المشجرة:</span>
+            ${getSetButtonsHTML('mindmap')}
+        </div>
+    `;
+
+    if(!currentData || currentData.length === 0) return headerBtns + '<div class="text-center p-4">لا توجد بيانات للمشجرة في هذه المجموعة</div>';
     
     let treeHTML = `<ul class="tree-list root-list pr-0">`; 
-    DB.mindmapTree.forEach(node => { 
+    currentData.forEach(node => { 
         treeHTML += buildTreeHTML(node, 0); 
     }); 
     treeHTML += `</ul>`;
     
     return `
+        ${headerBtns}
         <div class="mb-4 text-center bg-[color:var(--bg-panel-solid)] border-2 border-[color:var(--border-color)] p-2 rounded-xl">
             <p class="text-xs font-bold text-[color:var(--text-muted)]">انقر على العُقَد للتوسيع والطي.</p>
         </div>
@@ -352,10 +410,16 @@ function renderCards() {
 }
 
 function renderTF() {
-    if(!DB.tf || DB.tf.length === 0) return '<div class="text-center p-4">لا توجد أسئلة صواب وخطأ</div>';
-    if (State.tfIdx >= DB.tf.length) return renderFinishScreen('الصواب والخطأ', State.tfScore, DB.tf.length, 'tf');
+    const active = State.activeSet.tf;
+    const currentData = DB.tf[active];
     
-    const data = DB.tf[State.tfIdx]; 
+    if(!currentData || currentData.length === 0) {
+        return `${getProgressBar(0, 0, 'tf')}<div class="text-center p-4">لا توجد أسئلة صواب وخطأ في هذه المجموعة</div>`;
+    }
+    
+    if (State.tfIdx >= currentData.length) return renderFinishScreen('الصواب والخطأ', State.tfScore, currentData.length, 'tf');
+    
+    const data = currentData[State.tfIdx]; 
     let msgHTML = '';
     
     if (State.tfChecked) {
@@ -369,9 +433,9 @@ function renderTF() {
     }
     
     return `
-        ${getProgressBar(State.tfIdx, DB.tf.length)}
+        ${getProgressBar(State.tfIdx, currentData.length, 'tf')}
         <div class="relative bg-[color:var(--bg-panel-solid)] border-2 border-[color:var(--border-color)] p-4 md:p-6 rounded-2xl mt-5 mb-4">
-            <div class="absolute -top-3 right-4 bg-[color:var(--accent-primary)] text-[color:var(--accent-text)] px-3 py-1 rounded-lg text-xs font-black border border-[color:var(--bg-panel)]">حقيقة أم خرافة؟</div>
+            <div class="absolute -top-3 right-4 bg-[color:var(--accent-primary)] text-[color:var(--accent-text)] px-3 py-1 rounded-lg text-xs font-black border border-[color:var(--bg-panel)]">صح / خطأ؟</div>
             <h3 class="text-base md:text-lg font-black text-center leading-relaxed mt-2">${data.q}</h3>
         </div>
         <div class="grid grid-cols-2 gap-3">
@@ -381,7 +445,7 @@ function renderTF() {
         ${msgHTML}
         <div class="flex justify-center mt-5">
             <button class="action-btn max-w-xs text-sm py-3" id="btn-next" ${!State.tfChecked ? 'disabled' : ''}>
-                ${State.tfIdx === DB.tf.length - 1 ? 'إنهاء الاختبار' : 'التالي 🡄'}
+                ${State.tfIdx === currentData.length - 1 ? 'إنهاء الاختبار' : 'التالي 🡄'}
             </button>
         </div>
     `;
@@ -555,10 +619,11 @@ function attachDynamicListeners() {
     
     document.querySelectorAll('.opt-btn').forEach(btn => btn.addEventListener('click', (e) => {
         if (State.tab === 'tf' && !State.tfChecked) { 
+            const activeSet = State.activeSet.tf;
             const t = e.target.closest('.opt-btn'); 
             State.tfSelected = t.dataset.val === 'true'; 
             State.tfChecked = true; 
-            if (State.tfSelected === DB.tf[State.tfIdx].a) State.tfScore++; 
+            if (State.tfSelected === DB.tf[activeSet][State.tfIdx].a) State.tfScore++; 
             renderTab(); 
         }
         
@@ -589,6 +654,7 @@ window.restartQuiz = function(tab) {
     if (tab === 'fill') { State.fillIdx = 0; State.fillScore = 0; State.fillChecked = false; State.fillVal = ''; }
     if (tab === 'comp') { State.compIdx = 0; State.compChecked = false; }
     window.scrollTo({ top: 0, behavior: 'smooth' }); 
+    updateTabCounters();
     renderTab();
 }
 
